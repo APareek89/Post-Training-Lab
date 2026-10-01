@@ -15,6 +15,13 @@ Open an issue with the **Critique** template and include:
 Especially welcome: evaluation design, data leakage, scorer blind spots, DPO pair design, and results
 that fail to reproduce on your hardware. Please say which platform you ran on.
 
+## Share your results
+
+Ran the notebooks, changed something, or adapted the lab to your own domain? Open an issue with the
+**Share your results** template. It asks for the same table every run produces (accuracy, hallucination,
+over-refusal and correct refusals, per eval set and condition), so results from different people and
+machines can be compared side by side. Negative results are as useful as positive ones.
+
 ## Pull requests
 
 - Run `python scripts/audit_notebooks.py` before committing. It fails if a notebook has saved outputs

@@ -13,7 +13,28 @@ The domain is **Meridian Motors**, a fictional electric-scooter company: 3 scoot
 so any improvement comes from the technique, not from pretraining memory. The documents, synthetic training
 data and evaluation sets all ship with the repo, so every core notebook runs without API keys.
 
-## What one run on a laptop showed
+## New: v2 teaches the same model to say "I don't know"
+
+v1 (below) ended with every setup failing the refusal bar. [`v2/`](v2/README.md) keeps the same 0.5B
+model, LoRA settings, documents and laptop, and rebuilds only the training data and the measurement:
+- refusal examples for the money and policy questions v1 never saw
+- training on the exact RAG prompts the model is served with
+- trap words on both the answer side and the refuse side
+- a calibrated Gemini judge
+
+![Base vs SFT v1 vs SFT v2 with RAG on dev_v2](docs/images/v2_results.png)
+
+On 140 new questions (dev_v2), all with RAG and graded together by the judge:
+
+| | Base | SFT v1 | SFT v2 |
+|---|---|---|---|
+| Answered correctly (of 60) | 98% | 92% | **98%** |
+| Declined unanswerable questions (of 80) | 10% | 55% | **79%** |
+
+SFT v2 sits at the 80% bar, inside the judge's run-to-run variation. Read
+[v2/README.md](v2/README.md) for the method, the trade-offs and how to run it on your own data.
+
+## v1: what one run on a laptop showed
 
 Qwen2.5-0.5B-Instruct (0.93 GB) with LoRA, scored by the master evaluation (notebook 13) on `dev_v1`:
 50 questions, 30 answerable and 20 that the documents cannot answer.
@@ -56,6 +77,8 @@ fact during training. Details are in [docs/REFERENCE_RESULTS.md](docs/REFERENCE_
 | 11 | Build the retrieval index | Does retrieval find the right evidence? | PostgreSQL + pgvector |
 | 12 | Retrieval-augmented answers | Does retrieval help each model answer? | 11 |
 | 13 | Master evaluation | Which combination passes the bar, and what does each technique add? | 11, trained adapters |
+
+The v2 notebooks (`v2/notebooks/00`–`04`: data audit, SFT v2, DPO pairs, DPO v2, final evaluation) build on these; see [v2/README.md](v2/README.md).
 
 Run them in order. Each notebook opens with the decision it supports and ends with what you should be able
 to say afterwards. Nothing is pre-run: outputs are stripped, so what you see is what your machine produced.
@@ -109,6 +132,12 @@ lists exactly which files encode Meridian-specific logic and what to rewrite.
 
 This lab is shared so people can find its weaknesses. Open an issue with the **Critique** template, or see
 [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Share your results
+
+Ran the notebooks on another model, machine or domain? Open an issue with the **Share your results**
+template ([CONTRIBUTING.md](CONTRIBUTING.md)). It asks for the same small table every run produces,
+so results from different people can be compared side by side. Negative results are welcome.
 
 ## Licence
 

@@ -15,3 +15,6 @@ __pycache__/
 .ipynb_checkpoints/
 .DS_Store
 .vscode/
+# v2 run logs and temporary notebook copies
+v2/logs/
+_tmp_*.ipynb

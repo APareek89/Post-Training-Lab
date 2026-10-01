@@ -95,3 +95,19 @@ premium with RAG.
 - **CPT learned the style of the documents, not their numbers,** and never declined.
 - **DPO left behaviour unchanged at these settings.** Its metrics equal SFT's in every condition.
 - **Adding independently trained CPT and SFT adapters together made everything worse.**
+
+## v2 (1 October 2026)
+
+Same model, LoRA settings and hardware; rebuilt training data and a Gemini judge. Full method and
+tables in [v2/README.md](../v2/README.md); raw numbers in `v2/data/reference_results_*.json`.
+
+| Model + RAG (reranked) | dev_v2 correct (of 60) | dev_v2 declined (of 80) | dev_v1 correct (of 30) | dev_v1 declined (of 20) |
+|---|---|---|---|---|
+| Base | 98% | 10% | 87% | 10% |
+| SFT v1 | 92% | 55% | 87% | 35% |
+| SFT v2 | 98% | 79% | 97% | 90% |
+
+Scored by the Gemini judge (`gemini-flash-latest`, reported as `gemini-3.8-flash`; 60/60 on its
+calibration set), all models judged together, blind. The judge counts a refusal that also invents a
+detail as a failure, so its v1 refusal rates are lower than the keyword scorer's above. SFT v2 training:
+1,759 examples, 2 epochs, 119 minutes on an Apple M4 (MPS, float32).
